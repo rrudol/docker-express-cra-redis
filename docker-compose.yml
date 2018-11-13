@@ -1,0 +1,37 @@
+version: "3.3"
+
+services:
+  client:
+    build: ./client
+    command: npm start
+    volumes:
+      - ./client:/app
+    ports:
+      - "5000:3000"
+    networks:
+      - overlay
+
+  server:
+    build: ./server
+    command: npm run dev
+    volumes:
+      - ./server:/app
+    ports:
+      - "5001:80"
+    networks:
+      - overlay
+
+  redis:
+    image: redis:latest
+    command: ["redis-server", "--appendonly", "yes"]
+    hostname: redis
+    networks:
+      - overlay
+    volumes:
+      - redis-data:/data
+
+networks:
+  overlay:
+
+volumes:
+  redis-data:
